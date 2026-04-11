@@ -10,7 +10,7 @@ export default function Home() {
       <section className="hero">
         <h1>Stop Overthinking. Start Reaching Out.</h1>
         <p>
-          ColdReach generates personalized cold emails that actually get replies.
+          Reachzone generates personalized cold emails that actually get replies.
           Built for students chasing internships, referrals, and mentors.
         </p>
         {user ? (

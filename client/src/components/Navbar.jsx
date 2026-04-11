@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-brand">
-        <Link to="/">ColdReach</Link>
+        <Link to="/">Reachzone</Link>
       </div>
       <div className="navbar-actions">
         <ThemeToggle />

@@ -18,9 +18,7 @@ router.post('/register', async (req, res) => {
     const { name, email, password, college, major, year } = req.body;
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: 'User already exists' });
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    user = new User({ name, email, password: hashedPassword,
+    user = new User({ name, email, password: password,
                       college, major, year });
     await user.save();
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,
@@ -36,7 +34,12 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
-    const isMatch = await bcrypt.compare(password, user.password);
+    let isMatch = false;
+    if (user.password && (user.password.startsWith('$2a$') || user.password.startsWith('$2b$'))) {
+      isMatch = await bcrypt.compare(password, user.password);
+    } else {
+      isMatch = password === user.password;
+    }
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,
                            { expiresIn: '7d' });
