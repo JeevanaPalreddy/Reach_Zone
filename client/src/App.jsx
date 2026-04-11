@@ -9,6 +9,7 @@ import Generator from './pages/Generator.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Profile from './pages/Profile.jsx';
 import Roast from './pages/Roast.jsx';
+import Prep from './pages/Prep.jsx';
 
 export default function App() {
   return (
@@ -49,6 +50,14 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Roast />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/prep"
+            element={
+              <PrivateRoute>
+                <Prep />
               </PrivateRoute>
             }
           />

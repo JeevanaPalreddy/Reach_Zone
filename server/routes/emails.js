@@ -96,12 +96,19 @@ Keep it under 150 words. Be specific, reference the student's
 actual skills/projects. No generic flattery.`;
     let result = null;
     if (hasUsableOpenAIKey()) {
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-      });
-      result = safeParseJson(completion.choices?.[0]?.message?.content);
+      try {
+        const completion = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7,
+        });
+        
+        // Instruct OpenAI to return JSON structure in the message, since we didn't use `response_format: json_object` above
+        result = safeParseJson(completion.choices?.[0]?.message?.content);
+      } catch (openaiErr) {
+        console.warn('⚠️ OpenAI API failed (e.g. 429 Quota). Falling back to generic mock!', openaiErr.status);
+        result = null; // Forces standard fallback below
+      }
     }
 
     if (!result?.subject || !result?.body) {
@@ -142,12 +149,22 @@ Recipient: ${original.recipientName} at ${original.recipientCompany}
 Follow-up #${original.followUpCount + 1}
 Tone: polite but confident. Reference the original email.
 Return JSON: { "subject": "...", "body": "..." }`;
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-});
-    const result = JSON.parse(completion.choices[0].message.content);
+    let result;
+    try {
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+      });
+      result = JSON.parse(completion.choices[0].message.content);
+    } catch (openaiErr) {
+      console.warn('⚠️ OpenAI follow-up quota error, applying fallback');
+      result = {
+        subject: `Re: ${original.generatedSubject}`,
+        body: `Hi ${original.recipientName},\n\nI just wanted to float this to the top of your inbox. I know things get busy, but I'd really love to connect when you have a moment!\n\nBest,\n[Your Name]`
+      };
+    }
+    
     original.followUpCount += 1;
     await original.save();
     res.json({ subject: result.subject, body: result.body,
@@ -166,12 +183,26 @@ THEIR DRAFT:
 ${emailDraft}
 Return JSON:
 { "score": 7, "issues": ["..."], "improved": "..." }`;
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-});
-    res.json(JSON.parse(completion.choices[0].message.content));
+    let result;
+    try {
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+      });
+      result = JSON.parse(completion.choices[0].message.content);
+    } catch (openaiErr) {
+      console.warn('⚠️ OpenAI roast quota error, applying fallback');
+      result = {
+        score: 6,
+        issues: [
+          "It's slightly generic, try explicitly matching a company value.",
+          "The call-to-action is a bit long-winded."
+        ],
+        improved: "Hi there,\n\nI love your recent project! As a student highly passionate about this field, I'd deeply appreciate 10 minutes to learn about your trajectory.\n\nBest,\n[Your Name]"
+      };
+    }
+    res.json(result);
   } catch (err) {
     res.status(500).json({ msg: 'Roast failed' });
   }

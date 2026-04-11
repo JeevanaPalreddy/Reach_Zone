@@ -16,7 +16,9 @@ mongoose
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/emails', require('./routes/emails'));
 app.use('/api/templates', require('./routes/templates'));
-const PORT = process.env.PORT || 5002;
+app.use('/api/prep', require('./routes/prep'));
+
+const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -24,6 +24,7 @@ export default function Navbar() {
             <>
               <Link to="/generate">Generate</Link>
               <Link to="/dashboard">Dashboard</Link>
+              <Link to="/prep">Interview Prep</Link>
               <Link to="/profile">Profile</Link>
               <button type="button" onClick={handleLogout}>
                 Logout
