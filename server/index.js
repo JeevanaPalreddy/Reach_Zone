@@ -6,11 +6,8 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors({
-  origin: [
-    "http://localhost:5173",          // local development
-    "https://reach-zone-7jz83gop2-jeevanapalreddy-4080s-projects.vercel.app"    // your vercel frontend URL
-  ],
-  credentials: true
+  origin: "*",
+  credentials: false
 }));
 app.use(express.json());
 
