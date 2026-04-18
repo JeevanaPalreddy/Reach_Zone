@@ -52,7 +52,7 @@ The platform also includes:
 | AI Integration | OpenAI API (GPT) |
 | Authentication | JWT, bcrypt |
 | Deployment | Vercel (Frontend), Render (Backend) |
-| Dev Tools | VS Code, Postman, Git, GitHub |
+| Dev Tools | VS Code, Postman, GitHub |
 
 ---
 
@@ -210,23 +210,3 @@ http://localhost:5173
 5. Deploy
 
 ---
-
-## 👥 Contributors
-
-| Name | Roll Number |
-|---|---|
-| Kokkakonda Varsha | 23311A05V3 |
-| Alugu Maheshwari | 23311A05W4 |
-| Depa Urvi | 23311A05W7 |
-| J Laxmi Varshitha | 23311A05X0 |
-| Meda Karthik Reddy | 23311A05Z3 |
-| P Jeevana Jyothi | 23311A05AA |
-
-**Instructor:** Dr. Dheeraj Sundaragiri  
-**Institution:** Sreenidhi Institute of Science and Technology, Hyderabad
-
----
-
-## 📄 License
-
-This project was developed as part of the **Web Technologies Lab (9FC66)** — B.Tech CSE, 2025-2026.
