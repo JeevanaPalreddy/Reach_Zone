@@ -1,4 +1,4 @@
-# 🚀 ReachZone
+# 🚀 ReachZone - https://reach-zone.vercel.app
 
 > AI-powered cold outreach email generator for college students — craft professional emails for internships, referrals, and mentorship in seconds.
 
